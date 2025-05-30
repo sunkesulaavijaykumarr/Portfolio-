@@ -1,0 +1,21 @@
+{
+  "name": "Sunkesula Vijay Kumar",
+  "short_name": "VK Portfolio",
+  "description": "Full Stack Developer specializing in React, Node.js, and modern web technologies",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "/vk-logo.svg",
+      "sizes": "80x80",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ]
+} 
