@@ -3,19 +3,19 @@ import { Code2, Book, Users, Lightbulb, Target, Coffee } from 'lucide-react';
 const About = () => {
   const qualities = [
     {
-      icon: <Code2 className="w-6 h-6" />,
-      title: 'Passionate Programmer',
-      description: 'Dedicated to writing clean, maintainable code and learning modern development practices.'
-    },
-    {
       icon: <Book className="w-6 h-6" />,
       title: 'Recent Graduate',
       description: 'B.Tech in Electronics and Communication Engineering from KL University, eager to start my professional journey.'
     },
     {
-      icon: <Users className="w-6 h-6" />,
-      title: 'Team Player',
-      description: 'Strong collaborative skills developed through academic projects and team activities.'
+      icon: <Coffee className="w-6 h-6" />,
+      title: 'Eager Learner',
+      description: 'Actively learning new technologies and keeping up with industry trends.'
+    },
+    {
+      icon: <Code2 className="w-6 h-6" />,
+      title: 'Passionate Programmer',
+      description: 'Dedicated to writing clean, maintainable code and learning modern development practices.'
     },
     {
       icon: <Lightbulb className="w-6 h-6" />,
@@ -23,15 +23,15 @@ const About = () => {
       description: 'Analytical thinker with a passion for solving technical challenges through innovative solutions.'
     },
     {
+      icon: <Users className="w-6 h-6" />,
+      title: 'Team Player',
+      description: 'Strong collaborative skills developed through academic projects and team activities.'
+    },
+    {
       icon: <Target className="w-6 h-6" />,
       title: 'Goal-Oriented',
       description: 'Focused on continuous improvement and achieving excellence in software development.'
     },
-    {
-      icon: <Coffee className="w-6 h-6" />,
-      title: 'Eager Learner',
-      description: 'Actively learning new technologies and keeping up with industry trends.'
-    }
   ];
 
   return (
@@ -43,13 +43,13 @@ const About = () => {
           </h2>
           <div className="w-20 h-1 bg-blue-500 mx-auto mb-8 rounded-full"></div>
           <p className="text-lg text-slate-300 leading-relaxed mb-6">
-            A recent graduate from KL University with a B.Tech in Electronics and Communication Engineering. 
-            Passionate about software development and eager to apply my technical skills in a professional environment.
+            A 2025 graduate from KL University with a B.Tech degree in Electronics and Communication Engineering. 
+            Passionate about both hardware and software development, eager to apply my technical and interpersonal skills in a professional environment.
           </p>
-          <p className="text-lg text-slate-300 leading-relaxed">
+          {/* <p className="text-lg text-slate-300 leading-relaxed">
             Through my academic journey, I've developed a strong foundation in programming and problem-solving, 
             with a particular interest in full-stack development and modern web technologies.
-          </p>
+          </p> */}
         </div>
 
         {/* Qualities Grid */}

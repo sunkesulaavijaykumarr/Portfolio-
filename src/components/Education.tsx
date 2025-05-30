@@ -27,28 +27,38 @@ const Education = () => {
   const educationData: Education[] = [
     {
       id: 1,
-      years: '2018 - 2022',
-      degree: 'Bachelor of Science in Computer Science',
-      institution: 'University of California, Berkeley',
-      description: 'Focused on web technologies, UI/UX design, and software engineering principles. Graduated with honors.',
+      years: '2018 - 2019',
+      degree: 'Board of Secondary Education ANDHRA PRADESH',
+      institution: 'AKSHARA HIGH SCHOOL',
+      description: 'Strong foundation in Math and Science',
       achievements: [
-        'Dean\'s List for Academic Excellence (2019-2022)',
-        'Senior Thesis: "Modern Web Architecture Patterns"',
-        'Teaching Assistant for Web Development Course'
+        'Consistent academic excellence in Mathematics and Science',
+        'Regular participant in classroom activities and assignments',
       ],
       logo: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       color: 'bg-blue-500'
     },
     {
       id: 2,
-      years: '2016 - 2018',
-      degree: 'Associate Degree in Web Development',
-      institution: 'Bay Area Community College',
-      description: 'Foundational courses in web technologies, design principles, and programming fundamentals.',
+      years: '2019 - 2021',
+      degree: 'Board of Intermediate Education, Andhra Pradesh',
+      institution: 'Narayana Junior College',
+      description: 'Intermediate Education (MPC) - Mathematics, Physics, and Chemistry',
       achievements: [
-        'President of Student Web Developers Club',
-        'Winner of Annual Hackathon 2017',
-        'Internship at Local Tech Startup'
+        'Consistent academic excellence in Mathematics, Physics, and Chemistry',
+      ],
+      logo: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      color: 'bg-teal-500'
+    },
+    {
+      id: 3,
+      years: '2021 - 2025',
+      degree: 'Bachelor of Technology, Electronics and Communication Engineering',
+      institution: 'Koneru Lakshmaiah University',
+      description: 'Possess experience in full stack development and familiarity with VLSI and RTL design concepts. Actively expanding skills in AI (artificial intelligence), committed to enhancing problem-solving abilities and exploring innovative technologies.',
+      achievements: [
+        'Possess experience in full stack development and familiarity with VLSI and RTL design concepts.',
+        'Actively expanding skills in AI (artificial intelligence), committed to enhancing problem-solving abilities and exploring innovative technologies.',
       ],
       logo: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       color: 'bg-teal-500'
@@ -58,36 +68,36 @@ const Education = () => {
   const certificateData: Certificate[] = [
     {
       id: 1,
+      date: 'Nov 2022',
+      name: 'Full Stack Web Development',
+      issuer: 'Bootcamp With CODEHELP',
+      link: 'https://ik.imagekit.io/0q5aygovy/1725355189715-certificate.png?updatedAt=1748428148080',
+      icon: <FileText size={16} className="text-amber-500" />
+    },
+    {
+      id: 2,
       date: 'Dec 2023',
       name: 'Advanced React and Redux',
       issuer: 'Udemy',
       link: '#',
       icon: <FileText size={16} className="text-blue-500" />
     },
-    {
-      id: 2,
-      date: 'Aug 2023',
-      name: 'TypeScript Professional',
-      issuer: 'Codecademy',
-      link: '#',
-      icon: <FileText size={16} className="text-teal-500" />
-    },
-    {
-      id: 3,
-      date: 'Mar 2023',
-      name: 'UI/UX Design Masterclass',
-      issuer: 'Interaction Design Foundation',
-      link: '#',
-      icon: <FileText size={16} className="text-purple-500" />
-    },
-    {
-      id: 4,
-      date: 'Nov 2022',
-      name: 'Full Stack Web Development',
-      issuer: 'Bootcamp With CODEHELP',
-      link: 'https://ik.imagekit.io/0q5aygovy/1725355189715-certificate.png?updatedAt=1748428148080',
-      icon: <FileText size={16} className="text-amber-500" />
-    }
+    // {
+    //   id: 3,
+    //   date: 'Aug 2023',
+    //   name: 'TypeScript Professional',
+    //   issuer: 'Codecademy',
+    //   link: '#',
+    //   icon: <FileText size={16} className="text-teal-500" />
+    // },
+    // {
+    //   id: 4,
+    //   date: 'Mar 2023',
+    //   name: 'UI/UX Design Masterclass',
+    //   issuer: 'Interaction Design Foundation',
+    //   link: '#',
+    //   icon: <FileText size={16} className="text-purple-500" />
+    // },
   ];
 
   return (
@@ -97,7 +107,7 @@ const Education = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Educational Journey</h2>
           <div className="h-1 w-20 bg-blue-500 mx-auto rounded-full mb-8"></div>
           <p className="text-slate-300">
-            My formal education and continuous learning path that has shaped my skills and expertise.
+            Formal education alongside continuous learning has played a pivotal role in shaping my skills and expertise.
           </p>
         </div>
         
@@ -234,7 +244,7 @@ const Education = () => {
             <p className="text-slate-300 text-center mb-6">
               I believe in lifelong learning and consistently invest time in expanding my knowledge and skills through various platforms.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
               <div className="bg-slate-800/60 p-4 rounded-lg">
                 <span className="block text-2xl font-bold text-blue-500">50+</span>
                 <span className="text-slate-400">Online Courses</span>
@@ -251,7 +261,7 @@ const Education = () => {
                 <span className="block text-2xl font-bold text-amber-500">8</span>
                 <span className="text-slate-400">Industry Conferences</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
