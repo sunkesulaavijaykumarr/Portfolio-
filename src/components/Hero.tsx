@@ -18,7 +18,7 @@ const Hero = () => {
   const timeoutRef = useRef<number | null>(null);
   
   const emailSubject = "Job Opportunity for Full Stack Developer";
-  const emailBody = "Hi Vijaykumar,%0A%0AI came across your portfolio and I'm interested in discussing a potential job opportunity with you.%0A%0ACompany: %0APosition: %0ALocation: %0A%0ALooking forward to hearing from you.%0A%0ABest regards,%0A";
+  const emailBody = "Hi Vijay Kumar,%0A%0A I recently had the chance to review your portfolio and was genuinely impressed by your background in full stack development, as well as your diverse skills in both hardware and software. continuous learning and hands-on experience in modern web technologies align closely with what we're looking for. %0A%0AWe currently have an opening for a Full Stack Developer and I believe your profile could be a great fit. %0A%0ACompany: %0APosition: %0ALocation: %0AJob Type: %0A%0A If you're open to exploring this opportunity, I’d love to schedule a quick call to share more details about the role, our team, and how we could potentially work together.%0A%0APlease let me know your availability, and feel free to share your updated resume if convenient.%0A%0ALooking forward to hearing from you!%0A%0ABest regards,%0A[Your Full Name],%0A[Your Job Title / Department],%0A[Company Name],%0A[Phone Number / Email / LinkedIn]";
   const emailAddress = "sunkesulaavijaykumarr@gmail.com";
 
   const emailLinks = {
