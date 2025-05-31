@@ -13,20 +13,18 @@
 .smooth-scroll {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-  scroll-padding: 1rem;
 }
 
 /* Card styles */
 .skill-card {
   transition: all 0.3s ease;
+  will-change: transform;
   scroll-snap-align: start;
 }
 
 .skill-card:hover {
-  border-color: rgba(59, 130, 246, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Progress bar animation */
@@ -41,4 +39,25 @@
 
 .animate-skillProgress {
   animation: skillProgress 1.5s ease-out forwards;
+}
+
+/* Hide scrollbar but keep functionality */
+.overflow-x-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.overflow-x-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Arrow button hover effects */
+.arrow-button {
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.arrow-button:hover {
+  opacity: 1;
+  transform: scale(1.1);
 } 

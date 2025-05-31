@@ -19,7 +19,9 @@ import {
   Wrench,
   TestTube,
   Network,
-  Lock
+  Lock,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 interface Skill {
@@ -50,6 +52,7 @@ const Skills = () => {
   const [isHovering, setIsHovering] = useState(false);
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorDotRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -68,17 +71,43 @@ const Skills = () => {
       }
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (scrollContainerRef.current) {
+        const scrollAmount = 300;
+        if (e.key === 'ArrowLeft') {
+          scrollContainerRef.current.scrollLeft -= scrollAmount;
+          setScrollPosition(scrollContainerRef.current.scrollLeft);
+        } else if (e.key === 'ArrowRight') {
+          scrollContainerRef.current.scrollLeft += scrollAmount;
+          setScrollPosition(scrollContainerRef.current.scrollLeft);
+        }
+      }
+    };
+
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setScrollPosition(e.currentTarget.scrollLeft);
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300;
+      const newPosition = direction === 'left' 
+        ? scrollContainerRef.current.scrollLeft - scrollAmount 
+        : scrollContainerRef.current.scrollLeft + scrollAmount;
+      
+      scrollContainerRef.current.scrollTo({
+        left: newPosition,
+        behavior: 'smooth'
+      });
+      setScrollPosition(newPosition);
+    }
   };
 
   const handleMouseEnter = () => {
@@ -499,59 +528,80 @@ const Skills = () => {
             ))}
           </div>
 
-          {/* Skills Horizontal Scroll */}
-          <div 
-            className="relative w-full overflow-x-auto hide-scrollbar smooth-scroll"
-            onScroll={handleScroll}
-          >
-            <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 pb-6 px-3 sm:px-4">
-              {activeSkills.map((skill, index) => (
-                <div
-                  key={`${skill.name}-${index}`}
-                  className="flex-none w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]"
-                >
-                  <div className="bg-slate-800/50 p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-all duration-300 h-full skill-card">
-                    <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-slate-700/50 p-1.5 sm:p-2 md:p-2.5 flex items-center justify-center">
-                        {skill.logo ? (
-                          <img
-                            src={skill.logo}
-                            alt={skill.name}
-                            className="w-full h-full object-contain"
-                            loading="lazy"
-                          />
-                        ) : (
-                          React.cloneElement(skill.icon as React.ReactElement, { 
-                            size: isMobile ? 16 : 20 
-                          })
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-1.5 sm:mb-2 truncate">
-                          {skill.name}
-                        </h3>
-                        <div className="w-full bg-slate-700 rounded-full h-1.5 sm:h-2">
-                          <div
-                            className={`h-full rounded-full ${skill.color}`}
-                            style={{
-                              width: `${skill.level}%`,
-                              transition: 'width 1s ease-in-out'
-                            }}
-                          ></div>
+          {/* Skills Cards with Navigation Arrows */}
+          <div className="relative">
+            {/* Left Arrow */}
+            <button 
+              onClick={() => handleScroll('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-slate-800/80 hover:bg-slate-700/80 text-white p-2 rounded-full backdrop-blur-sm transition-all duration-300 shadow-lg"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={24} />
+            </button>
+
+            {/* Right Arrow */}
+            <button 
+              onClick={() => handleScroll('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-slate-800/80 hover:bg-slate-700/80 text-white p-2 rounded-full backdrop-blur-sm transition-all duration-300 shadow-lg"
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={24} />
+            </button>
+
+            {/* Skills Cards Container */}
+            <div 
+              ref={scrollContainerRef}
+              className="overflow-x-hidden relative"
+            >
+              <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 transition-transform duration-300 ease-out px-10">
+                {activeSkills.map((skill, index) => (
+                  <div
+                    key={`${skill.name}-${index}`}
+                    className="flex-none w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]"
+                  >
+                    <div className="bg-slate-800/50 p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-all duration-300 h-full hover:-translate-y-2">
+                      <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-slate-700/50 p-1.5 sm:p-2 md:p-2.5 flex items-center justify-center">
+                          {skill.logo ? (
+                            <img
+                              src={skill.logo}
+                              alt={skill.name}
+                              className="w-full h-full object-contain"
+                              loading="lazy"
+                            />
+                          ) : (
+                            React.cloneElement(skill.icon as React.ReactElement, { 
+                              size: isMobile ? 16 : 20 
+                            })
+                          )}
                         </div>
-                        <div className="flex justify-between mt-1">
-                          <span className="text-xs sm:text-sm text-slate-400 truncate">
-                            {skill.subCategory}
-                          </span>
-                          <span className="text-xs sm:text-sm text-slate-400 ml-2">
-                            {skill.level}%
-                          </span>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-1.5 sm:mb-2 truncate">
+                            {skill.name}
+                          </h3>
+                          <div className="w-full bg-slate-700 rounded-full h-1.5 sm:h-2">
+                            <div
+                              className={`h-full rounded-full bg-gradient-to-r ${skill.color}`}
+                              style={{
+                                width: `${skill.level}%`,
+                                transition: 'width 1s ease-in-out'
+                              }}
+                            ></div>
+                          </div>
+                          <div className="flex justify-between mt-1">
+                            <span className="text-xs sm:text-sm text-slate-400 truncate">
+                              {skill.subCategory}
+                            </span>
+                            <span className="text-xs sm:text-sm text-slate-400 ml-2">
+                              {skill.level}%
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
