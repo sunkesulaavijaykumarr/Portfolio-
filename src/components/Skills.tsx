@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/skills.css';
+import '../styles/cursor.css';
 import {
   Code2,
   Database,
@@ -45,18 +46,53 @@ const Skills = () => {
   const [activeCategory, setActiveCategory] = useState('Frontend Development');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const cursorDotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      setCursorPosition({ x: e.clientX, y: e.clientY });
+      if (cursorRef.current) {
+        cursorRef.current.style.left = `${e.clientX}px`;
+        cursorRef.current.style.top = `${e.clientY}px`;
+      }
+      if (cursorDotRef.current) {
+        cursorDotRef.current.style.left = `${e.clientX}px`;
+        cursorDotRef.current.style.top = `${e.clientY}px`;
+      }
+    };
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     setScrollPosition(e.currentTarget.scrollLeft);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    if (cursorRef.current) {
+      cursorRef.current.classList.add('hover');
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    if (cursorRef.current) {
+      cursorRef.current.classList.remove('hover');
+    }
   };
 
   const skillCategories: SkillCategory[] = [
@@ -427,108 +463,112 @@ const Skills = () => {
     ) || [];
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-slate-900" id="skills">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6">
-        {/* Header Section */}
-        <div className="max-w-3xl mx-auto text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-4">
-            Technical <span className="text-blue-500">Skills</span>
-          </h2>
-          <div className="h-1 w-16 sm:w-20 bg-blue-500 mx-auto rounded-full mb-4 sm:mb-5 md:mb-6"></div>
-          <p className="text-xs sm:text-sm md:text-base text-slate-300 mb-4 sm:mb-5 md:mb-6">
-            A comprehensive overview of my technical expertise and proficiency in various technologies.
-          </p>
-        </div>
+    <>
+      <div ref={cursorRef} className="custom-cursor" />
+      <div ref={cursorDotRef} className="cursor-dot" />
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-slate-900" id="skills">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6">
+          {/* Header Section */}
+          <div className="max-w-3xl mx-auto text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-4">
+              Technical <span className="text-blue-500">Skills</span>
+            </h2>
+            <div className="h-1 w-16 sm:w-20 bg-blue-500 mx-auto rounded-full mb-4 sm:mb-5 md:mb-6"></div>
+            <p className="text-xs sm:text-sm md:text-base text-slate-300 mb-4 sm:mb-5 md:mb-6">
+              A comprehensive overview of my technical expertise and proficiency in various technologies.
+            </p>
+          </div>
 
-        {/* Skills Categories */}
-        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 mb-6 sm:mb-8 md:mb-10">
-          {categories.map((category) => (
-            <button
-              key={category.title}
-              onClick={() => setActiveCategory(category.title)}
-              className={`px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg text-xs sm:text-sm md:text-base flex items-center gap-1 sm:gap-1.5 md:gap-2 transition-all ${
-                activeCategory === category.title
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-              }`}
-            >
-              {React.cloneElement(category.icon as React.ReactElement, { 
-                size: isMobile ? 14 : 20 
-              })}
-              {category.title}
-            </button>
-          ))}
-        </div>
-
-        {/* Skills Horizontal Scroll */}
-        <div 
-          className="relative w-full overflow-x-auto hide-scrollbar smooth-scroll"
-          onScroll={handleScroll}
-        >
-          <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 pb-6 px-3 sm:px-4">
-            {activeSkills.map((skill, index) => (
-              <div
-                key={`${skill.name}-${index}`}
-                className="flex-none w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]"
+          {/* Skills Categories */}
+          <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 mb-6 sm:mb-8 md:mb-10">
+            {categories.map((category) => (
+              <button
+                key={category.title}
+                onClick={() => setActiveCategory(category.title)}
+                className={`px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg text-xs sm:text-sm md:text-base flex items-center gap-1 sm:gap-1.5 md:gap-2 transition-all ${
+                  activeCategory === category.title
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
               >
-                <div className="bg-slate-800/50 p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-all duration-300 h-full skill-card">
-                  <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-slate-700/50 p-1.5 sm:p-2 md:p-2.5 flex items-center justify-center">
-                      {skill.logo ? (
-                        <img
-                          src={skill.logo}
-                          alt={skill.name}
-                          className="w-full h-full object-contain"
-                          loading="lazy"
-                        />
-                      ) : (
-                        React.cloneElement(skill.icon as React.ReactElement, { 
-                          size: isMobile ? 16 : 20 
-                        })
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-1.5 sm:mb-2 truncate">
-                        {skill.name}
-                      </h3>
-                      <div className="w-full bg-slate-700 rounded-full h-1.5 sm:h-2">
-                        <div
-                          className={`h-full rounded-full ${skill.color}`}
-                          style={{
-                            width: `${skill.level}%`,
-                            transition: 'width 1s ease-in-out'
-                          }}
-                        ></div>
+                {React.cloneElement(category.icon as React.ReactElement, { 
+                  size: isMobile ? 14 : 20 
+                })}
+                {category.title}
+              </button>
+            ))}
+          </div>
+
+          {/* Skills Horizontal Scroll */}
+          <div 
+            className="relative w-full overflow-x-auto hide-scrollbar smooth-scroll"
+            onScroll={handleScroll}
+          >
+            <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 pb-6 px-3 sm:px-4">
+              {activeSkills.map((skill, index) => (
+                <div
+                  key={`${skill.name}-${index}`}
+                  className="flex-none w-[260px] sm:w-[280px] md:w-[300px] lg:w-[320px]"
+                >
+                  <div className="bg-slate-800/50 p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-all duration-300 h-full skill-card">
+                    <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-slate-700/50 p-1.5 sm:p-2 md:p-2.5 flex items-center justify-center">
+                        {skill.logo ? (
+                          <img
+                            src={skill.logo}
+                            alt={skill.name}
+                            className="w-full h-full object-contain"
+                            loading="lazy"
+                          />
+                        ) : (
+                          React.cloneElement(skill.icon as React.ReactElement, { 
+                            size: isMobile ? 16 : 20 
+                          })
+                        )}
                       </div>
-                      <div className="flex justify-between mt-1">
-                        <span className="text-xs sm:text-sm text-slate-400 truncate">
-                          {skill.subCategory}
-                        </span>
-                        <span className="text-xs sm:text-sm text-slate-400 ml-2">
-                          {skill.level}%
-                        </span>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-1.5 sm:mb-2 truncate">
+                          {skill.name}
+                        </h3>
+                        <div className="w-full bg-slate-700 rounded-full h-1.5 sm:h-2">
+                          <div
+                            className={`h-full rounded-full ${skill.color}`}
+                            style={{
+                              width: `${skill.level}%`,
+                              transition: 'width 1s ease-in-out'
+                            }}
+                          ></div>
+                        </div>
+                        <div className="flex justify-between mt-1">
+                          <span className="text-xs sm:text-sm text-slate-400 truncate">
+                            {skill.subCategory}
+                          </span>
+                          <span className="text-xs sm:text-sm text-slate-400 ml-2">
+                            {skill.level}%
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Scroll Progress Indicator */}
-        <div className="flex justify-center mt-4">
-          <div className="w-16 sm:w-20 md:w-24 h-1 bg-blue-500/20 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-blue-500 rounded-full transition-all duration-300"
-              style={{
-                width: `${(scrollPosition / ((activeSkills.length - 1) * (isMobile ? 270 : 330))) * 100}%`
-              }}
-            />
+          {/* Scroll Progress Indicator */}
+          <div className="flex justify-center mt-4">
+            <div className="w-16 sm:w-20 md:w-24 h-1 bg-blue-500/20 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                style={{
+                  width: `${(scrollPosition / ((activeSkills.length - 1) * (isMobile ? 270 : 330))) * 100}%`
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
