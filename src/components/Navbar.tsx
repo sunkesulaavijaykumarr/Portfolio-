@@ -1,15 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Code2, Mail } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { Mail, Code2 } from 'lucide-react';
 import 'animate.css';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showEmailOptions, setShowEmailOptions] = useState(false);
   const [logoText, setLogoText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
-  const timeoutRef = useRef<number | null>(null);
   const fullLogoText = 'VK';
 
   const emailSubject = "Opportunity for Full Stack Developer Role – Let's Connect";
@@ -20,40 +17,6 @@ const Navbar = () => {
     gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=${emailSubject}&body=${emailBody}`,
     default: `mailto:${emailAddress}?subject=${emailSubject}&body=${emailBody}`
   };
-
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setShowEmailOptions(true);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setShowEmailOptions(false);
-    }, 300); // 300ms delay before closing
-  };
-
-  const EmailOptions = ({ className = "", onSelect = () => {} }) => (
-    <div className={`backdrop-blur-lg bg-slate-900/90 rounded-lg p-1.5 ${className}`}>
-      <a
-        href={emailLinks.gmail}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block px-3 py-1.5 text-[13px] text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-md transition-colors mb-1"
-        onClick={onSelect}
-      >
-        Gmail
-      </a>
-      <a
-        href={emailLinks.default}
-        className="block px-3 py-1.5 text-[13px] text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-md transition-colors"
-        onClick={onSelect}
-      >
-        Mail App
-      </a>
-    </div>
-  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -104,23 +67,6 @@ const Navbar = () => {
     };
   }, [isMenuOpen]);
 
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      y: -20,
-      transition: {
-        duration: 0.2
-      }
-    },
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.3
-      }
-    }
-  };
-
   const handleNavigation = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -144,31 +90,44 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
-      <div className="max-w-[1440px] mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-10 md:h-12">
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${
+      isScrolled 
+        ? 'top-6 left-0 flex justify-center' 
+        : 'top-0 left-0'
+    }`}>
+      <div className={`relative transition-all duration-300 ${
+        isScrolled 
+          ? 'w-auto mx-auto rounded-full bg-[#000000] shadow-[0_8px_32px_rgba(0,0,0,0.4)]' 
+          : 'w-full bg-[#000000]/95'
+      }`}>
+        {/* Main Navbar Content */}
+        <div className={`flex items-center h-14 justify-between transition-all duration-300 ${
+          isScrolled ? 'px-6 max-w-none gap-8' : 'container mx-auto px-4 md:px-6'
+        }`}>
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <Code2 className="w-6 h-6 md:w-8 md:h-8 text-[#4F46E5]" />
-            <a 
-              href="#" 
-              className="flex items-center"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                setIsMenuOpen(false);
-              }}
-            >
-              <span className="text-lg md:text-[22px] font-bold text-[#4F46E5]">{logoText}</span>
-              <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} text-[#4F46E5] ml-[1px] text-lg md:text-[22px] font-bold`}></span>
-            </a>
-          </div>
+          <a 
+            href="#" 
+            className="flex items-center gap-2.5 group flex-shrink-0"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setIsMenuOpen(false);
+            }}
+          >
+            <Code2 className="w-6 h-6 text-[#4F46E5] transition-transform group-hover:scale-110" />
+            <span className="text-lg font-bold text-[#4F46E5] group-hover:text-[#4338CA] transition-colors">
+              {logoText}
+              <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} ml-[1px]`}></span>
+            </span>
+          </a>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className={`hidden md:flex items-center transition-all duration-300 ${
+            isScrolled ? 'gap-6' : 'gap-10'
+          }`}>
             <a 
               href="#" 
-              className="text-[15px] text-[#94A3B8] hover:text-white transition-colors"
+              className="text-sm text-white/90 hover:text-white transition-colors px-1"
               onClick={(e) => {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -180,7 +139,7 @@ const Navbar = () => {
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className="text-[15px] text-[#94A3B8] hover:text-white transition-colors"
+                className="text-sm text-white/90 hover:text-white transition-colors px-1"
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavigation(item.id);
@@ -191,105 +150,105 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Hire Me Button with Options */}
-          <div className="hidden md:block relative"
-               onMouseEnter={handleMouseEnter}
-               onMouseLeave={handleMouseLeave}>
-            <div
-              className="px-4 py-1.5 text-[14px] font-medium text-white bg-[#4F46E5] rounded hover:bg-[#4338CA] transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              <Mail size={14} />
-              Hire Me
-            </div>
-            {showEmailOptions && (
-              <div className="absolute right-0 mt-1 w-32">
-                <EmailOptions onSelect={() => setShowEmailOptions(false)} />
+          {/* Right Section: Hire Me Button & Mobile Menu */}
+          <div className="flex items-center gap-4">
+            {/* Hire Me Button */}
+            <div className="hidden md:block relative">
+              <div
+                className={`transition-all duration-300 text-sm font-medium text-white flex items-center cursor-pointer rounded-full ${
+                  isScrolled
+                    ? 'px-4 py-1.5 bg-[#4F46E5] hover:bg-[#4338CA] gap-1.5'
+                    : 'px-5 py-2 bg-gradient-to-r from-[#4F46E5] to-[#4338CA] gap-2'
+                } hover:shadow-lg hover:shadow-[#4F46E5]/20`}
+              >
+                <Mail size={isScrolled ? 14 : 16} />
+                <span className={isScrolled ? '' : 'font-semibold'}>Hire Me</span>
               </div>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative z-50 p-2 focus:outline-none"
-            aria-label="Toggle Menu"
-          >
-            <div className="w-6 flex flex-col items-end space-y-1.5">
-              <span
-                className={`block h-0.5 bg-white transition-all duration-300 ${
-                  isMenuOpen ? 'w-6 -rotate-45 translate-y-2' : 'w-6'
-                }`}
-              ></span>
-              <span
-                className={`block h-0.5 bg-white transition-all duration-300 ${
-                  isMenuOpen ? 'w-6 opacity-0' : 'w-4'
-                }`}
-              ></span>
-              <span
-                className={`block h-0.5 bg-white transition-all duration-300 ${
-                  isMenuOpen ? 'w-6 rotate-45 -translate-y-2' : 'w-5'
-                }`}
-              ></span>
             </div>
-          </button>
-        </div>
-      </div>
 
-      {/* Mobile Menu */}
-      <div
-        className={`fixed top-[60px] left-0 right-0 bg-slate-900/75 backdrop-blur-sm transition-all duration-300 ${
-          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
-        style={{ height: 'auto', maxHeight: '70vh' }}
-      >
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col items-center space-y-4">
-            <a
-              href="#"
-              className="text-base font-medium text-white/90 hover:text-white transition-colors flex items-center gap-2"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                setIsMenuOpen(false);
-              }}
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`md:hidden relative z-50 w-8 h-8 flex items-center justify-center transition-all duration-300 rounded-full ${
+                isMenuOpen ? 'bg-white/5' : ''
+              }`}
+              aria-label="Toggle Menu"
             >
-              Home
-            </a>
-            {navItems.map((item) => (
+              <div className="relative w-6 h-6 flex items-center justify-center">
+                <span
+                  className={`absolute h-[2px] bg-current transition-all duration-300 ${
+                    isMenuOpen 
+                      ? 'w-5 rotate-45 bg-[#4F46E5]' 
+                      : 'w-4 translate-y-[-4px] bg-white'
+                  }`}
+                ></span>
+                <span
+                  className={`absolute h-[2px] bg-current transition-all duration-300 ${
+                    isMenuOpen 
+                      ? 'w-5 -rotate-45 bg-[#4F46E5]' 
+                      : 'w-3 translate-y-[4px] bg-white'
+                  }`}
+                ></span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu - Expands from the navbar */}
+        <div
+          className={`absolute top-full left-1/2 -translate-x-1/2 w-[300px] mt-3 rounded-2xl bg-[#000000] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 overflow-hidden ${
+            isMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'
+          }`}
+        >
+          <div className="py-5 px-5">
+            <div className="flex flex-col items-center space-y-4">
               <a
-                key={item.id}
-                href={`#${item.id}`}
-                className="text-base font-medium text-white/90 hover:text-white transition-colors capitalize"
+                href="#"
+                className="text-sm font-medium text-white/90 hover:text-white transition-colors capitalize w-full text-center py-2.5 rounded-lg hover:bg-white/5"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleNavigation(item.id);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
                   setIsMenuOpen(false);
                 }}
               >
-                {item.label}
+                Home
               </a>
-            ))}
-            
-            {/* Mobile Hire Me Button */}
-            <div className="pt-2 w-full space-y-2">
-              <a
-                href={emailLinks.gmail}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full py-2 text-center text-white bg-[#4F46E5]/90 hover:bg-[#4F46E5] rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Mail size={16} />
-                Contact via Gmail
-              </a>
-              <a
-                href={emailLinks.default}
-                className="block w-full py-2 text-center text-white bg-[#4F46E5]/90 hover:bg-[#4F46E5] rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Mail size={16} />
-                Open Mail App
-              </a>
+              {navItems.map((item) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className="text-sm font-medium text-white/90 hover:text-white transition-colors capitalize w-full text-center py-2.5 rounded-lg hover:bg-white/5"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavigation(item.id);
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+              
+              {/* Mobile Contact Buttons */}
+              <div className="w-full pt-3 space-y-2.5">
+                <a
+                  href={emailLinks.gmail}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full px-4 py-1.5 text-sm text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-lg transition-all hover:shadow-lg hover:shadow-[#4F46E5]/20 flex items-center justify-center gap-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Mail size={14} />
+                  Contact via Gmail
+                </a>
+                <a
+                  href={emailLinks.default}
+                  className="block w-full px-4 py-1.5 text-sm text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-lg transition-all hover:shadow-lg hover:shadow-[#4F46E5]/20 flex items-center justify-center gap-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Mail size={14} />
+                  Open Mail App
+                </a>
+              </div>
             </div>
           </div>
         </div>
