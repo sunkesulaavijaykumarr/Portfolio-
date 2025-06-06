@@ -7,11 +7,10 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [logoText, setLogoText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
+  const [showEmailOptions, setShowEmailOptions] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isHiding, setIsHiding] = useState(false);
-  const lastScrollY = useRef(0);
-  const scrollTimeout = useRef<number | null>(null);
-  const hideTimeout = useRef<number | null>(null);
+  const timeoutRef = useRef<number | null>(null);
   const fullLogoText = 'VK';
 
   const emailSubject = "Opportunity for Full Stack Developer Role – Let's Connect";
@@ -39,35 +38,27 @@ const Navbar = () => {
       }
 
       // Clear any existing timeouts
-      if (scrollTimeout.current) {
-        window.clearTimeout(scrollTimeout.current);
-      }
-      if (hideTimeout.current) {
-        window.clearTimeout(hideTimeout.current);
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
       }
 
       // Set new timeout to start hide animation after no scrolling
-      scrollTimeout.current = window.setTimeout(() => {
+      timeoutRef.current = window.setTimeout(() => {
         if (currentScrollY > 100 && !isMenuOpen) {
           setIsHiding(true); // Start fade out
           // Actually hide after animation completes
-          hideTimeout.current = window.setTimeout(() => {
+          timeoutRef.current = window.setTimeout(() => {
             setIsVisible(false);
           }, 1500); // Match the CSS transition duration
         }
       }, 2500);
-
-      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout.current) {
-        window.clearTimeout(scrollTimeout.current);
-      }
-      if (hideTimeout.current) {
-        window.clearTimeout(hideTimeout.current);
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
       }
     };
   }, [isMenuOpen]);
@@ -128,6 +119,48 @@ const Navbar = () => {
     { id: 'contact', label: 'Contact' }
   ];
 
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setShowEmailOptions(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = window.setTimeout(() => {
+      setShowEmailOptions(false);
+    }, 100); // 1 seconds delay before closing
+  };
+
+  const EmailOptions = ({ className = "" }) => (
+    <div 
+      className={`backdrop-blur-lg bg-slate-900/90 rounded-lg p-1.5 ${className}`}
+      onMouseEnter={() => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      }}
+      onMouseLeave={handleMouseLeave}
+    >
+      <a
+        href={emailLinks.gmail}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block px-3 py-1.5 text-[13px] text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-md transition-colors mb-1"
+        onClick={() => setShowEmailOptions(false)}
+      >
+        Gmail
+      </a>
+      <a
+        href={emailLinks.default}
+        className="block px-3 py-1.5 text-[13px] text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-md transition-colors"
+        onClick={() => setShowEmailOptions(false)}
+      >
+        Mail App
+      </a>
+    </div>
+  );
+
   return (
     <nav 
       className={`fixed w-full z-50 transition-all duration-[1500ms] ease-in-out ${
@@ -144,16 +177,10 @@ const Navbar = () => {
       onMouseEnter={() => {
         setIsHiding(false);
         setIsVisible(true);
-        if (hideTimeout.current) {
-          window.clearTimeout(hideTimeout.current);
-        }
       }}
       onMouseLeave={() => {
         if (window.scrollY > 100 && !isMenuOpen) {
           setIsHiding(true);
-          hideTimeout.current = window.setTimeout(() => {
-            setIsVisible(false);
-          }, 1500);
         }
       }}
     >
@@ -215,17 +242,26 @@ const Navbar = () => {
           {/* Right Section: Hire Me Button & Mobile Menu */}
           <div className="flex items-center gap-4">
             {/* Hire Me Button */}
-            <div className="hidden md:block relative">
+            <div 
+              className="hidden md:block relative"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <div
-                className={`transition-all duration-300 text-sm font-medium text-white flex items-center cursor-pointer rounded-full ${
+                className={`transition-all duration-300 text-sm font-medium text-white flex items-center cursor-pointer rounded-md ${
                   isScrolled
                     ? 'px-4 py-1.5 bg-[#4F46E5] hover:bg-[#4338CA] gap-1.5'
-                    : 'px-5 py-2 bg-gradient-to-r from-[#4F46E5] to-[#4338CA] gap-2'
+                    : 'px-5 py-2 bg-[#4F46E5] hover:bg-[#4338CA] gap-2'
                 } hover:shadow-lg hover:shadow-[#4F46E5]/20`}
               >
-                <Mail size={isScrolled ? 14 : 16} />
+                <Mail size={isScrolled ? 14 : 16} className="ml-0" />
                 <span className={isScrolled ? '' : 'font-semibold'}>Hire Me</span>
               </div>
+              {showEmailOptions && (
+                <div className="absolute right-0 mt-1 w-32 z-50">
+                  <EmailOptions />
+                </div>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -257,63 +293,61 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu - Expands from the navbar */}
-        <div
-          className={`absolute top-full left-1/2 -translate-x-1/2 w-[300px] mt-3 rounded-2xl bg-[#000000] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 overflow-hidden ${
-            isMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'
-          }`}
-        >
-          <div className="py-5 px-5">
-            <div className="flex flex-col items-center space-y-4">
-              <a
-                href="#"
-                className="text-sm font-medium text-white/90 hover:text-white transition-colors capitalize w-full text-center py-2.5 rounded-lg hover:bg-white/5"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                  setIsMenuOpen(false);
-                }}
-              >
-                Home
-              </a>
-              {navItems.map((item) => (
+        {isMenuOpen && (
+          <div className="absolute top-full left-0 right-0 mt-3 mx-4 rounded-2xl bg-[#000000] shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden md:hidden">
+            <div className="py-4">
+              <div className="flex flex-col items-stretch px-4 space-y-1">
                 <a
-                  key={item.id}
-                  href={`#${item.id}`}
+                  href="#"
                   className="text-sm font-medium text-white/90 hover:text-white transition-colors capitalize w-full text-center py-2.5 rounded-lg hover:bg-white/5"
                   onClick={(e) => {
                     e.preventDefault();
-                    handleNavigation(item.id);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     setIsMenuOpen(false);
                   }}
                 >
-                  {item.label}
+                  Home
                 </a>
-              ))}
-              
-              {/* Mobile Contact Buttons */}
-              <div className="w-full pt-3 space-y-2.5">
-                <a
-                  href={emailLinks.gmail}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full px-4 py-1.5 text-sm text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-lg transition-all hover:shadow-lg hover:shadow-[#4F46E5]/20 flex items-center justify-center gap-1.5"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Mail size={14} />
-                  Contact via Gmail
-                </a>
-                <a
-                  href={emailLinks.default}
-                  className="block w-full px-4 py-1.5 text-sm text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-lg transition-all hover:shadow-lg hover:shadow-[#4F46E5]/20 flex items-center justify-center gap-1.5"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Mail size={14} />
-                  Open Mail App
-                </a>
+                {navItems.map((item) => (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    className="text-sm font-medium text-white/90 hover:text-white transition-colors capitalize w-full text-center py-2.5 rounded-lg hover:bg-white/5"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavigation(item.id);
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                
+                {/* Mobile Contact Buttons */}
+                <div className="pt-3 space-y-2">
+                  <a
+                    href={emailLinks.gmail}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full px-4 py-2.5 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-xl transition-all hover:shadow-lg hover:shadow-[#4F46E5]/20 flex items-center justify-center gap-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Mail size={16} />
+                    Contact via Gmail
+                  </a>
+                  <a
+                    href={emailLinks.default}
+                    className="block w-full px-4 py-2.5 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-xl transition-all hover:shadow-lg hover:shadow-[#4F46E5]/20 flex items-center justify-center gap-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Mail size={16} />
+                    Open Mail App
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );
