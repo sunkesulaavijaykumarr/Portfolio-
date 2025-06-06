@@ -1,181 +1,90 @@
-import React, { useState } from 'react';
-import { Mail, Youtube, Linkedin, Github } from 'lucide-react';
+import React from 'react';
+import { Mail, Twitter, Linkedin, Github } from 'lucide-react';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phoneNumber: '',
-    subject: '',
-    message: ''
-  });
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-  };
+  const emailSubject = "Let's Connect!";
+  const emailBody = "Hi Vijay Kumar,%0A%0AI came across your portfolio and would love to connect with you.%0A%0ABest regards,%0A[Your Name]";
+  const emailAddress = "sunkesulaavijaykumarr@gmail.com";
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const emailLinks = {
+    gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=${emailSubject}&body=${emailBody}`,
+    default: `mailto:${emailAddress}?subject=${emailSubject}&body=${emailBody}`
   };
 
   return (
-    <section id="contact" className="relative py-20 bg-slate-900">
+    <section id="contact" className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-slate-900 relative px-4 sm:px-6 py-12 sm:py-16 md:py-20">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 opacity-50"></div>
       
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Get In Touch
-          </h2>
-          <p className="text-slate-400 text-lg">
-            Let's discuss opportunities and build something amazing together.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
-            {/* Contact Form */}
-          <div className="lg:col-span-3 bg-slate-800/50 p-8 rounded-xl border border-slate-700">
-            <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
-                    Name*
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                    value={formData.name}
-                        onChange={handleChange}
-                        required
-                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                    placeholder="Enter your name"
-                      />
-                    </div>
-                    <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                    Email*
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                    value={formData.email}
-                        onChange={handleChange}
-                        required
-                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                    placeholder="Enter your email"
-                      />
-                </div>
-                    </div>
-                    
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="phoneNumber" className="block text-sm font-medium text-slate-300 mb-2">
-                    Phone Number*
-                  </label>
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                    placeholder="Enter your phone number"
-                  />
-                </div>
-                    <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-slate-300 mb-2">
-                    Subject*
-                      </label>
-                      <input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                    value={formData.subject}
-                        onChange={handleChange}
-                        required
-                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                    placeholder="Enter your subject"
-                      />
-                </div>
-                    </div>
-                    
-                    <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">
-                  Message*
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                  value={formData.message}
-                        onChange={handleChange}
-                        required
-                  rows={4}
-                  className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white resize-none"
-                  placeholder="Enter your message"
-                ></textarea>
-                    </div>
-                    
-                    <button
-                      type="submit"
-                className="w-full px-6 py-3 bg-[#4F46E5] text-white rounded-lg hover:bg-[#4338CA] transition-colors font-medium text-base"
-                    >
-                Submit
-                    </button>
-            </form>
+      {/* Content Container */}
+      <div className="w-full max-w-[1440px] mx-auto relative z-10">
+        <div className="max-w-4xl mx-auto flex flex-col items-center">
+          {/* Header */}
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-[#4F46E5]">
+              Let's Connect
+            </h2>
+            <div className="space-y-2 sm:space-y-3">
+              <p className="text-slate-300 text-base sm:text-lg md:text-xl max-w-2xl mx-auto">
+                Looking for a dedicated full-stack developer to join your team?
+              </p>
+              <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
+                I'm actively seeking opportunities to contribute and grow with innovative companies.
+              </p>
+            </div>
           </div>
-
-          {/* Contact Information */}
-          <div className="lg:col-span-2 bg-[#4F46E5] p-8 rounded-xl text-white">
-            <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-            
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <Mail className="w-6 h-6" />
-                <a href="mailto:sunkesulaavijaykumarr@gmail.com" className="hover:underline">
-                  sunkesulaavijaykumarr@gmail.com
+          
+          <div className="w-full max-w-lg px-4 sm:px-0">
+            {/* Contact Buttons */}
+            <div className="flex flex-col items-center gap-8 sm:gap-10 md:gap-12">
+              {/* Email Button */}
+              <div className="w-full transform hover:scale-[1.02] transition-transform duration-300">
+                <a
+                  href={emailLinks.gmail}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-4 sm:py-5 px-6 sm:px-8 bg-[#4F46E5] hover:bg-[#4338CA] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 text-base sm:text-lg md:text-xl font-medium"
+                >
+                  <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
+                  Send me a message
                 </a>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-indigo-400">
-                <h4 className="text-lg font-semibold mb-4">Follow Me</h4>
-                <div className="flex gap-4">
-                  <a
-                    href="https://github.com/yourusername"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 hover:bg-indigo-600 rounded-full transition-colors"
-                  >
-                    <Github className="w-6 h-6" />
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/yourusername"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 hover:bg-indigo-600 rounded-full transition-colors"
-                  >
-                    <Linkedin className="w-6 h-6" />
-                  </a>
-                  <a
-                    href="https://youtube.com/@yourusername"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 hover:bg-indigo-600 rounded-full transition-colors"
-                  >
-                    <Youtube className="w-6 h-6" />
-                  </a>
-                </div>
-                  </div>
+              {/* Social Links */}
+              <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
+                <a
+                  href="https://github.com/sunkesulaavijaykumarr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 sm:p-4 bg-slate-800 hover:bg-slate-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-slate-300 hover:text-white transform hover:scale-110 active:scale-95"
+                  title="GitHub"
+                >
+                  <Github className="w-6 h-6 sm:w-7 sm:h-7" />
+                </a>
+                <a
+                  href="https://linkedin.com/in/sunkesulaavijaykumarr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 sm:p-4 bg-slate-800 hover:bg-slate-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-slate-300 hover:text-white transform hover:scale-110 active:scale-95"
+                  title="LinkedIn"
+                >
+                  <Linkedin className="w-6 h-6 sm:w-7 sm:h-7" />
+                </a>
+                <a
+                  href="https://twitter.com/sunkesulaa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 sm:p-4 bg-slate-800 hover:bg-slate-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-slate-300 hover:text-white transform hover:scale-110 active:scale-95"
+                  title="X (Twitter)"
+                >
+                  <Twitter className="w-6 h-6 sm:w-7 sm:h-7" />
+                </a>
+              </div>
+
+              {/* Additional Info */}
+              <p className="text-center text-slate-400 text-sm sm:text-base mt-2 sm:mt-4">
+                Response time: Usually within 24 hours
+              </p>
             </div>
           </div>
         </div>

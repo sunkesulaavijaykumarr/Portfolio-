@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/skills.css';
 import {
   Code2,
   Database,
   Globe,
-  Cloud,
   Layout,
   Server,
   Shield,
@@ -17,8 +16,9 @@ import {
   Settings,
   Wrench,
   TestTube,
-  Network,
-  Lock
+  Lock,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 interface Skill {
@@ -44,6 +44,7 @@ interface SkillCategory {
 const Skills = () => {
   const [activeCategory, setActiveCategory] = useState('Frontend Development');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -53,6 +54,17 @@ const Skills = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300; // Adjust this value to control scroll distance
+      const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   const skillCategories: SkillCategory[] = [
     {
@@ -233,91 +245,6 @@ const Skills = () => {
       ]
     },
     {
-      title: 'DevOps & Cloud',
-      icon: <Cloud size={24} />,
-      color: 'purple',
-      subCategories: [
-        {
-          title: 'Cloud Platforms',
-          skills: [
-            { 
-              name: 'AWS', 
-              level: 85, 
-              icon: <Cloud size={20} />, 
-              color: 'from-orange-500 to-orange-600',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg'
-            },
-            { 
-              name: 'Docker', 
-              level: 90, 
-              icon: <Box size={20} />, 
-              color: 'from-blue-500 to-blue-600',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg'
-            },
-            { 
-              name: 'Kubernetes', 
-              level: 80, 
-              icon: <Box size={20} />, 
-              color: 'from-blue-600 to-blue-700',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg'
-            }
-          ]
-        },
-        {
-          title: 'CI/CD & Automation',
-          skills: [
-            { 
-              name: 'GitHub Actions', 
-              level: 90, 
-              icon: <GitBranch size={20} />, 
-              color: 'from-gray-600 to-gray-700',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg'
-            },
-            { 
-              name: 'Jenkins', 
-              level: 85, 
-              icon: <Settings size={20} />, 
-              color: 'from-red-500 to-red-600',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg'
-            },
-            { 
-              name: 'Terraform', 
-              level: 80, 
-              icon: <Cloud size={20} />, 
-              color: 'from-purple-500 to-purple-600',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg'
-            }
-          ]
-        },
-        {
-          title: 'Monitoring & Logging',
-          skills: [
-            { 
-              name: 'Prometheus', 
-              level: 85, 
-              icon: <TestTube size={20} />, 
-              color: 'from-orange-500 to-orange-600',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg'
-            },
-            { 
-              name: 'Grafana', 
-              level: 85, 
-              icon: <Network size={20} />, 
-              color: 'from-yellow-500 to-yellow-600',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg'
-            },
-            { 
-              name: 'ELK Stack', 
-              level: 80, 
-              icon: <Database size={20} />, 
-              color: 'from-teal-500 to-teal-600',
-              logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg'
-            }
-          ]
-        }
-      ]
-    },
-    {
       title: 'Other Skills',
       icon: <Wrench size={24} />,
       color: 'amber',
@@ -422,84 +349,152 @@ const Skills = () => {
     ) || [];
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-slate-900" id="skills">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6">
+    <section className="min-h-[calc(100vh-80px)] flex flex-col justify-center bg-slate-900 relative" id="skills">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 opacity-50"></div>
+      
+      <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 relative z-10">
         {/* Header Section */}
-        <div className="max-w-3xl mx-auto text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-4">
-            Technical <span className="text-blue-500">Skills</span>
+        <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-[#4F46E5]">
+            Technical Skills
           </h2>
-          <div className="h-1 w-16 sm:w-20 bg-blue-500 mx-auto rounded-full mb-4 sm:mb-5 md:mb-6"></div>
-          <p className="text-xs sm:text-sm md:text-base text-slate-300 mb-4 sm:mb-5 md:mb-6">
-            A comprehensive overview of my technical expertise and proficiency in various technologies.
+          <p className="text-slate-300 text-base sm:text-lg md:text-xl max-w-2xl mx-auto">
+            Expertise in modern web technologies and development practices
           </p>
         </div>
 
         {/* Skills Categories */}
-        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 mb-6 sm:mb-8 md:mb-10">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 sm:mb-10 md:mb-12">
           {categories.map((category) => (
             <button
               key={category.title}
               onClick={() => setActiveCategory(category.title)}
-              className={`px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg text-xs sm:text-sm md:text-base flex items-center gap-1 sm:gap-1.5 md:gap-2 transition-all ${
+              className={`px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg text-sm sm:text-base flex items-center gap-2 transition-all ${
                 activeCategory === category.title
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  ? 'bg-blue-600 text-white shadow-lg scale-105'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:scale-102'
               }`}
             >
               {React.cloneElement(category.icon as React.ReactElement, { 
-                size: isMobile ? 14 : 20 
+                size: isMobile ? 16 : 20 
               })}
               {category.title}
             </button>
           ))}
         </div>
 
-        {/* Skills Cards with Smooth Scroll */}
-        <div className="overflow-x-auto smooth-scroll hide-scrollbar">
-          <div className="flex gap-4 md:gap-6 pb-6 px-4 min-w-max">
+        {/* Skills Cards */}
+        <div className="relative max-w-[1440px] mx-auto">
+          {/* Desktop View - Horizontal Scroll with Arrows */}
+          <div className="hidden md:block">
+            <button
+              onClick={() => handleScroll('left')}
+              className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-slate-800/90 hover:bg-slate-700 text-white p-2 sm:p-3 rounded-full shadow-lg transition-all hover:scale-110"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            
+            <div className="overflow-x-auto smooth-scroll hide-scrollbar" ref={scrollContainerRef}>
+              <div className="flex gap-6 pb-6 px-4">
+                {activeSkills.map((skill, index) => (
+                  <div
+                    key={`${skill.name}-${index}`}
+                    className="w-[300px] flex-shrink-0"
+                  >
+                    <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-all duration-300 h-full skill-card">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-lg bg-slate-700/50 p-2.5 flex items-center justify-center">
+                          {skill.logo ? (
+                            <img
+                              src={skill.logo}
+                              alt={skill.name}
+                              className="w-full h-full object-contain"
+                              loading="lazy"
+                            />
+                          ) : (
+                            React.cloneElement(skill.icon as React.ReactElement, { size: 20 })
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-semibold mb-2 truncate">
+                            {skill.name}
+                          </h3>
+                          <div className="w-full bg-slate-700 rounded-full h-2">
+                            <div
+                              className={`h-full rounded-full bg-gradient-to-r ${skill.color} animate-skillProgress`}
+                              style={{
+                                width: `${skill.level}%`,
+                                '--progress': `${skill.level}%`
+                              } as React.CSSProperties}
+                            ></div>
+                          </div>
+                          <div className="flex justify-between mt-2">
+                            <span className="text-sm text-slate-400 truncate">
+                              {skill.subCategory}
+                            </span>
+                            <span className="text-sm text-slate-400 ml-2">
+                              {skill.level}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleScroll('right')}
+              className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-slate-800/90 hover:bg-slate-700 text-white p-2 sm:p-3 rounded-full shadow-lg transition-all hover:scale-110"
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+
+          {/* Mobile View - 2 Column Grid */}
+          <div className="md:hidden grid grid-cols-2 gap-3">
             {activeSkills.map((skill, index) => (
               <div
                 key={`${skill.name}-${index}`}
-                className="w-[280px] md:w-[300px] flex-shrink-0"
+                className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 transition-all duration-300"
               >
-                <div className="bg-slate-800/50 p-4 md:p-5 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-all duration-300 h-full skill-card">
-                  <div className="flex items-start gap-3 md:gap-4">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-slate-700/50 p-2 md:p-2.5 flex items-center justify-center">
-                      {skill.logo ? (
-                        <img
-                          src={skill.logo}
-                          alt={skill.name}
-                          className="w-full h-full object-contain"
-                          loading="lazy"
-                        />
-                      ) : (
-                        React.cloneElement(skill.icon as React.ReactElement, { 
-                          size: isMobile ? 16 : 20 
-                        })
-                      )}
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-10 h-10 rounded-lg bg-slate-700/80 p-2 flex items-center justify-center">
+                    {skill.logo ? (
+                      <img
+                        src={skill.logo}
+                        alt={skill.name}
+                        className="w-full h-full object-contain"
+                        loading="lazy"
+                      />
+                    ) : (
+                      React.cloneElement(skill.icon as React.ReactElement, { size: 16 })
+                    )}
+                  </div>
+                  <div className="w-full text-center">
+                    <h3 className="text-sm font-semibold truncate mb-1.5">
+                      {skill.name}
+                    </h3>
+                    <div className="w-full bg-slate-700/90 rounded-full h-1.5">
+                      <div
+                        className={`h-full rounded-full bg-gradient-to-r ${skill.color} animate-skillProgress`}
+                        style={{
+                          width: `${skill.level}%`,
+                          '--progress': `${skill.level}%`
+                        } as React.CSSProperties}
+                      ></div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base md:text-lg font-semibold mb-2 truncate">
-                        {skill.name}
-                      </h3>
-                      <div className="w-full bg-slate-700 rounded-full h-2">
-                        <div
-                          className={`h-full rounded-full bg-gradient-to-r ${skill.color} animate-skillProgress`}
-                          style={{
-                            width: `${skill.level}%`,
-                            '--progress': `${skill.level}%`
-                          } as React.CSSProperties}
-                        ></div>
-                      </div>
-                      <div className="flex justify-between mt-2">
-                        <span className="text-sm text-slate-400 truncate">
-                          {skill.subCategory}
-                        </span>
-                        <span className="text-sm text-slate-400 ml-2">
-                          {skill.level}%
-                        </span>
-                      </div>
+                    <div className="flex justify-between mt-1.5">
+                      <span className="text-[10px] text-slate-400">
+                        {skill.subCategory}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {skill.level}%
+                      </span>
                     </div>
                   </div>
                 </div>

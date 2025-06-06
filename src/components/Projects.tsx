@@ -1,198 +1,156 @@
-import React, { useState } from 'react';
-import { Github, ExternalLink, Code2, Users, Star, GitFork } from 'lucide-react';
-
-type ProjectCategory = 'frontend' | 'fullstack' | 'mobile' | 'other';
-type FilterType = 'all' | ProjectCategory;
-
-interface Project {
-  title: string;
-  description: string;
-  image: string;
-  technologies: string[];
-  githubLink: string;
-  demoLink: string;
-  stats: {
-    stars: number;
-    forks: number;
-    contributors: number;
-  };
-  category: ProjectCategory;
-}
+import { Sparkles, Brain, Code2, Rocket, Clock, Star, Calendar, BookOpen } from 'lucide-react';
 
 const Projects = () => {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  
-  const projects: Project[] = [
-    {
-      title: 'E-Commerce Platform',
-      description: 'A full-stack e-commerce platform built with Next.js, Node.js, and MongoDB. Features include user authentication, product management, cart functionality, and payment integration.',
-      image: '/projects/ecommerce.jpg',
-      technologies: ['Next.js', 'Node.js', 'MongoDB', 'Stripe', 'TypeScript'],
-      githubLink: 'https://github.com/username/ecommerce',
-      demoLink: 'https://ecommerce-demo.com',
-      stats: {
-        stars: 120,
-        forks: 45,
-        contributors: 8
-      },
-      category: 'fullstack'
-    },
-    {
-      title: 'AI Image Generator',
-      description: "An AI-powered image generation app using OpenAI's DALL-E API. Users can create, save, and share AI-generated artwork with the community.",
-      image: '/projects/ai-image.jpg',
-      technologies: ['React', 'OpenAI API', 'TailwindCSS', 'Firebase'],
-      githubLink: 'https://github.com/username/ai-image',
-      demoLink: 'https://ai-image-gen.com',
-      stats: {
-        stars: 89,
-        forks: 23,
-        contributors: 5
-      },
-      category: 'frontend'
-    },
-    {
-      title: 'Task Management App',
-      description: 'A mobile-first task management application with real-time updates, collaborative features, and offline support.',
-      image: '/projects/task-app.jpg',
-      technologies: ['React Native', 'Redux', 'Firebase', 'TypeScript'],
-      githubLink: 'https://github.com/username/task-app',
-      demoLink: 'https://task-app-demo.com',
-      stats: {
-        stars: 156,
-        forks: 67,
-        contributors: 12
-      },
-      category: 'mobile'
-    }
-  ];
+  // Calculate dates for the 10-day timeline
+  const startDate = new Date();
+  const endDate = new Date();
+  endDate.setDate(startDate.getDate() + 10);
 
-  const filteredProjects = activeFilter === 'all' 
-    ? projects 
-    : projects.filter(project => project.category === activeFilter);
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
 
   return (
     <section id="projects" className="py-20 bg-slate-900">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Featured <span className="text-blue-500">Projects</span>
+            My <span className="text-blue-500">Projects</span>
           </h2>
           <div className="w-20 h-1 bg-blue-500 mx-auto mb-8 rounded-full"></div>
-          <p className="text-lg text-slate-300 leading-relaxed">
-            A collection of my most impactful projects, demonstrating my expertise
-            in building scalable and innovative solutions.
-          </p>
-        </div>
-          
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {['all', 'frontend', 'fullstack', 'mobile', 'other'].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter as FilterType)}
-              className={`px-6 py-2 rounded-full border ${
-                activeFilter === filter
-                  ? 'bg-blue-500 text-white border-blue-500'
-                  : 'border-slate-700 text-slate-300 hover:border-blue-500 hover:text-blue-500'
-              } transition-all duration-300 capitalize`}
-              >
-              {filter}
-              </button>
-            ))}
-        </div>
-        
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
-            <div 
-              key={index}
-              className="group relative bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500/50 transition-all duration-500"
-            >
-              {/* Project Image */}
-              <div className="relative aspect-video overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="space-y-4">
+            <p className="text-lg text-slate-300 leading-relaxed">
+              Currently learning and exploring AI tools to enhance project development capabilities.
+            </p>
+            <div className="bg-blue-500/10 p-4 rounded-lg border border-blue-500/20 inline-block">
+              <div className="flex items-center gap-2 text-blue-400">
+                <BookOpen size={20} />
+                <span>Learning Phase: AI Development Tools & Integration</span>
               </div>
-              
-              {/* Project Content */}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-500 transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-slate-300 mb-4 line-clamp-3">
-                  {project.description}
-                </p>
-                
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, techIndex) => (
-                    <span 
-                      key={techIndex}
-                      className="px-3 py-1 text-sm rounded-full bg-slate-700/50 text-slate-300 border border-slate-600"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                
-                {/* Project Stats */}
-                <div className="flex items-center gap-4 mb-4 text-sm text-slate-400">
-                  <div className="flex items-center gap-1">
-                    <Star size={16} />
-                    <span>{project.stats.stars}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <GitFork size={16} />
-                    <span>{project.stats.forks}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Users size={16} />
-                    <span>{project.stats.contributors}</span>
-                  </div>
-                </div>
+            </div>
+          </div>
+        </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-4">
-                  <a
-                    href={project.githubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition-colors text-sm font-medium"
-                  >
-                    <Github size={16} />
-                    Code
-                  </a>
-                  <a 
-                    href={project.demoLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition-colors text-sm font-medium"
-                  >
-                    <ExternalLink size={16} />
-                    Live Demo
-                  </a>
+        {/* Upcoming Project Card */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-300">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                <Rocket size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold">First Project Coming Soon</h3>
+                <div className="flex items-center gap-2 text-slate-400 mt-1">
+                  <Calendar size={16} />
+                  <span>Expected: {formatDate(endDate)}</span>
                 </div>
               </div>
             </div>
-          ))}
+            <p className="text-slate-300 mb-4">
+              The first project will showcase the integration of AI capabilities with modern web technologies.
+              Currently in active development and scheduled to be completed within 10 days.
+            </p>
+            <div className="bg-slate-900/50 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-slate-300">Progress</span>
+                <span className="text-blue-400">In Development</span>
+              </div>
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="bg-blue-500 h-2 rounded-full w-[30%]"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        {/* Call to Action */}
-        <div className="mt-16 text-center">
-          <a 
-            href="https://github.com/username"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-slate-300 hover:text-white"
-          >
-            <Code2 size={20} />
-            View More Projects on GitHub
-          </a>
+
+        {/* Development Process */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition-all duration-300">
+            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4 text-blue-500">
+              <Brain size={24} />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">Learning Phase</h3>
+            <p className="text-slate-300">
+              Currently mastering AI development tools and best practices to create more intelligent and efficient solutions.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition-all duration-300">
+            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4 text-purple-500">
+              <Sparkles size={24} />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">Quality Focus</h3>
+            <p className="text-slate-300">
+              Taking time to ensure each project meets high standards of code quality and user experience.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 transition-all duration-300">
+            <div className="w-12 h-12 rounded-lg bg-teal-500/10 flex items-center justify-center mb-4 text-teal-500">
+              <Code2 size={24} />
+            </div>
+            <h3 className="text-xl font-semibold mb-3">Project Pipeline</h3>
+            <p className="text-slate-300">
+              Building a strong foundation with AI tools before launching a series of innovative projects.
+            </p>
+          </div>
+        </div>
+
+        {/* Project Timeline */}
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-slate-800/30 rounded-xl border border-slate-700 p-8">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <Clock size={24} className="text-blue-500" />
+              <h3 className="text-2xl font-semibold">10-Day Development Timeline</h3>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                  <Star size={16} className="text-blue-500" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold mb-2">Initial Setup & Planning</h4>
+                  <p className="text-slate-300">
+                    <span className="text-blue-400">{formatDate(startDate)}</span> - Project structure setup and feature planning
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                  <Code2 size={16} className="text-purple-500" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold mb-2">Core Development</h4>
+                  <p className="text-slate-300">
+                    <span className="text-purple-400">{formatDate(new Date(startDate.getTime() + 5 * 24 * 60 * 60 * 1000))}</span> - Implementation of main features
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-teal-500/20 flex items-center justify-center flex-shrink-0">
+                  <Rocket size={16} className="text-teal-500" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold mb-2">Project Launch</h4>
+                  <p className="text-slate-300">
+                    <span className="text-teal-400">{formatDate(endDate)}</span> - Final testing and deployment
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-slate-400 italic">
+              "Currently in the learning phase with AI tools. Projects will be released once a strong foundation is established."
+            </p>
+          </div>
         </div>
       </div>
     </section>

@@ -12,8 +12,8 @@ const Navbar = () => {
   const timeoutRef = useRef<number | null>(null);
   const fullLogoText = 'VK';
 
-  const emailSubject = "Opportunity for Full Stack Developer Role – Let’s Connect";
-  const emailBody = "Hi Vijay Kumar,%0A%0A I recently had the chance to review your portfolio and was genuinely impressed by your background in full stack development, as well as your diverse skills in both hardware and software. continuous learning and hands-on experience in modern web technologies align closely with what we're looking for. %0A%0AWe currently have an opening for a Full Stack Developer and I believe your profile could be a great fit. %0A%0ACompany: %0APosition: %0ALocation: %0AJob Type: %0A%0A If you're open to exploring this opportunity, I’d love to schedule a quick call to share more details about the role, our team, and how we could potentially work together.%0A%0APlease let me know your availability, and feel free to share your updated resume if convenient.%0A%0ALooking forward to hearing from you!%0A%0ABest regards,%0A[Your Full Name],%0A[Your Job Title / Department],%0A[Company Name],%0A[Phone Number / Email / LinkedIn]";
+  const emailSubject = "Opportunity for Full Stack Developer Role – Let's Connect";
+  const emailBody = "Hi Vijay Kumar,%0A%0A I recently had the chance to review your portfolio and was genuinely impressed by your background in full stack development, as well as your diverse skills in both hardware and software. continuous learning and hands-on experience in modern web technologies align closely with what we're looking for. %0A%0AWe currently have an opening for a Full Stack Developer and I believe your profile could be a great fit. %0A%0ACompany: %0APosition: %0ALocation: %0AJob Type: %0A%0A If you're open to exploring this opportunity, I'd love to schedule a quick call to share more details about the role, our team, and how we could potentially work together.%0A%0APlease let me know your availability, and feel free to share your updated resume if convenient.%0A%0ALooking forward to hearing from you!%0A%0ABest regards,%0A[Your Full Name],%0A[Your Job Title / Department],%0A[Company Name],%0A[Phone Number / Email / LinkedIn]";
   const emailAddress = "sunkesulaavijaykumarr@gmail.com";
 
   const emailLinks = {
@@ -135,12 +135,16 @@ const Navbar = () => {
     }
   };
 
+  const navItems = [
+    { id: 'about', label: 'About' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'education', label: 'Education' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
   return (
-    <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-[#0B0B0B]/95 backdrop-blur-sm shadow-lg' : 'bg-[#0B0B0B]'
-      } py-2 md:py-3`}
-    >
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-[1440px] mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-10 md:h-12">
           {/* Logo */}
@@ -172,14 +176,7 @@ const Navbar = () => {
             >
               Home
             </a>
-            {[
-              { id: 'about', label: 'About' },
-              { id: 'skills', label: 'Skills' },
-              { id: 'education', label: 'Education' },
-              { id: 'projects', label: 'Projects' },
-              { id: 'testimonials', label: 'Testimonials' },
-              { id: 'contact', label: 'Contact' }
-            ].map((item) => (
+            {navItems.map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
@@ -214,94 +211,89 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-1.5 text-[#94A3B8] hover:text-white rounded-lg transition-colors relative z-50"
-            aria-label="Toggle menu"
+            className="md:hidden relative z-50 p-2 focus:outline-none"
+            aria-label="Toggle Menu"
           >
-            <motion.div
-              animate={isMenuOpen ? "open" : "closed"}
-              variants={{
-                open: { rotate: 180 },
-                closed: { rotate: 0 }
-              }}
-              transition={{ duration: 0.2 }}
-            >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </motion.div>
+            <div className="w-6 flex flex-col items-end space-y-1.5">
+              <span
+                className={`block h-0.5 bg-white transition-all duration-300 ${
+                  isMenuOpen ? 'w-6 -rotate-45 translate-y-2' : 'w-6'
+                }`}
+              ></span>
+              <span
+                className={`block h-0.5 bg-white transition-all duration-300 ${
+                  isMenuOpen ? 'w-6 opacity-0' : 'w-4'
+                }`}
+              ></span>
+              <span
+                className={`block h-0.5 bg-white transition-all duration-300 ${
+                  isMenuOpen ? 'w-6 rotate-45 -translate-y-2' : 'w-5'
+                }`}
+              ></span>
+            </div>
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={menuVariants}
-            className="fixed inset-0 top-[56px] md:top-[60px] bg-[#0B0B0B]/98 backdrop-blur-lg md:hidden z-40"
-          >
-            <div className="h-[calc(100vh-56px)] md:h-[calc(100vh-60px)] flex flex-col px-4 py-6 overflow-y-auto">
-              <div className="flex flex-col space-y-4">
-                <a
-                  href="#"
-                  className="text-base font-medium text-[#94A3B8] hover:text-white transition-colors flex items-center gap-2"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  Home
-                </a>
-                {[
-                  { id: 'about', label: 'About' },
-                  { id: 'skills', label: 'Skills' },
-                  { id: 'education', label: 'Education' },
-                  { id: 'projects', label: 'Projects' },
-                  { id: 'testimonials', label: 'Testimonials' },
-                  { id: 'contact', label: 'Contact' }
-                ].map((item) => (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    className="text-base font-medium text-[#94A3B8] hover:text-white transition-colors capitalize"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavigation(item.id);
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    {item.label}
-                  </a>
-                ))}
-                
-                {/* Mobile Hire Me Button */}
-                <div className="pt-4 space-y-3">
-                  <a
-                    href={emailLinks.gmail}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full py-2.5 text-center text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Mail size={16} />
-                    Contact via Gmail
-                  </a>
-                  <a
-                    href={emailLinks.default}
-                    className="block w-full py-2.5 text-center text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Mail size={16} />
-                    Open Mail App
-                  </a>
-                </div>
-              </div>
+      {/* Mobile Menu */}
+      <div
+        className={`fixed top-[60px] left-0 right-0 bg-slate-900/75 backdrop-blur-sm transition-all duration-300 ${
+          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+        style={{ height: 'auto', maxHeight: '70vh' }}
+      >
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex flex-col items-center space-y-4">
+            <a
+              href="#"
+              className="text-base font-medium text-white/90 hover:text-white transition-colors flex items-center gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setIsMenuOpen(false);
+              }}
+            >
+              Home
+            </a>
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="text-base font-medium text-white/90 hover:text-white transition-colors capitalize"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavigation(item.id);
+                  setIsMenuOpen(false);
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+            
+            {/* Mobile Hire Me Button */}
+            <div className="pt-2 w-full space-y-2">
+              <a
+                href={emailLinks.gmail}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full py-2 text-center text-white bg-[#4F46E5]/90 hover:bg-[#4F46E5] rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Mail size={16} />
+                Contact via Gmail
+              </a>
+              <a
+                href={emailLinks.default}
+                className="block w-full py-2 text-center text-white bg-[#4F46E5]/90 hover:bg-[#4F46E5] rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Mail size={16} />
+                Open Mail App
+              </a>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </nav>
   );
 };
