@@ -1,7 +1,9 @@
-import React from 'react';
-import { Mail, Twitter, Linkedin, Github } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Twitter, Linkedin, Github, X } from 'lucide-react';
 
 const Contact = () => {
+  const [showEmailPopup, setShowEmailPopup] = useState(false);
+  
   const emailSubject = "Let's Connect!";
   const emailBody = "Hi Vijay Kumar,%0A%0AI came across your portfolio and would love to connect with you.%0A%0ABest regards,%0A[Your Name]";
   const emailAddress = "sunkesulaavijaykumarr@gmail.com";
@@ -9,6 +11,22 @@ const Contact = () => {
   const emailLinks = {
     gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=${emailSubject}&body=${emailBody}`,
     default: `mailto:${emailAddress}?subject=${emailSubject}&body=${emailBody}`
+  };
+
+  const handleEmailClick = (e: React.MouseEvent) => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      e.preventDefault();
+      setShowEmailPopup(true);
+    } else {
+      window.open(emailLinks.gmail, '_blank');
+    }
+  };
+
+  const handleEmailOptionClick = (type: 'gmail' | 'default') => {
+    setShowEmailPopup(false);
+    window.location.href = emailLinks[type];
   };
 
   return (
@@ -39,16 +57,47 @@ const Contact = () => {
             <div className="flex flex-col items-center gap-8 sm:gap-10 md:gap-12">
               {/* Email Button */}
               <div className="w-full transform hover:scale-[1.02] transition-transform duration-300">
-                <a
-                  href={emailLinks.gmail}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleEmailClick}
                   className="w-full py-4 sm:py-5 px-6 sm:px-8 bg-[#4F46E5] hover:bg-[#4338CA] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 text-base sm:text-lg md:text-xl font-medium"
                 >
                   <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
                   Send me a message
-                </a>
+                </button>
               </div>
+
+              {/* Email App Selection Popup */}
+              {showEmailPopup && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+                  <div className="bg-slate-900 rounded-2xl p-4 w-full max-w-xs animate-in fade-in duration-200">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-white">Choose Email App</h3>
+                      <button
+                        onClick={() => setShowEmailPopup(false)}
+                        className="p-1 hover:bg-slate-800 rounded-lg transition-colors"
+                      >
+                        <X size={20} className="text-slate-400" />
+                      </button>
+                    </div>
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => handleEmailOptionClick('gmail')}
+                        className="w-full py-3 px-4 bg-[#4F46E5] hover:bg-[#4338CA] text-white rounded-xl flex items-center gap-2 transition-colors"
+                      >
+                        <Mail size={18} />
+                        Open in Gmail
+                      </button>
+                      <button
+                        onClick={() => handleEmailOptionClick('default')}
+                        className="w-full py-3 px-4 bg-[#4F46E5] hover:bg-[#4338CA] text-white rounded-xl flex items-center gap-2 transition-colors"
+                      >
+                        <Mail size={18} />
+                        Open in Mail App
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Social Links */}
               <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
