@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Mail, Code2 } from 'lucide-react';
 import 'animate.css';
 
@@ -7,6 +7,11 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [logoText, setLogoText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isHiding, setIsHiding] = useState(false);
+  const lastScrollY = useRef(0);
+  const scrollTimeout = useRef<number | null>(null);
+  const hideTimeout = useRef<number | null>(null);
   const fullLogoText = 'VK';
 
   const emailSubject = "Opportunity for Full Stack Developer Role – Let's Connect";
@@ -20,18 +25,52 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      const currentScrollY = window.scrollY;
+      
+      // Cancel any ongoing hide animation
+      setIsHiding(false);
+      setIsVisible(true);
+      
+      // Update scrolled state
+      if (currentScrollY > 50) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
+
+      // Clear any existing timeouts
+      if (scrollTimeout.current) {
+        window.clearTimeout(scrollTimeout.current);
+      }
+      if (hideTimeout.current) {
+        window.clearTimeout(hideTimeout.current);
+      }
+
+      // Set new timeout to start hide animation after no scrolling
+      scrollTimeout.current = window.setTimeout(() => {
+        if (currentScrollY > 100 && !isMenuOpen) {
+          setIsHiding(true); // Start fade out
+          // Actually hide after animation completes
+          hideTimeout.current = window.setTimeout(() => {
+            setIsVisible(false);
+          }, 1500); // Match the CSS transition duration
+        }
+      }, 2500);
+
+      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout.current) {
+        window.clearTimeout(scrollTimeout.current);
+      }
+      if (hideTimeout.current) {
+        window.clearTimeout(hideTimeout.current);
+      }
     };
-  }, []);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     let index = 0;
@@ -90,12 +129,35 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'top-6 left-0 flex justify-center' 
-        : 'top-0 left-0'
-    }`}>
-      <div className={`relative transition-all duration-300 ${
+    <nav 
+      className={`fixed w-full z-50 transition-all duration-[1500ms] ease-in-out ${
+        isScrolled 
+          ? 'top-6 left-0 flex justify-center' 
+          : 'top-0 left-0'
+      } ${
+        !isVisible
+          ? '-translate-y-full opacity-0'
+          : isHiding
+            ? 'translate-y-1 opacity-30'
+            : 'translate-y-0 opacity-100'
+      }`}
+      onMouseEnter={() => {
+        setIsHiding(false);
+        setIsVisible(true);
+        if (hideTimeout.current) {
+          window.clearTimeout(hideTimeout.current);
+        }
+      }}
+      onMouseLeave={() => {
+        if (window.scrollY > 100 && !isMenuOpen) {
+          setIsHiding(true);
+          hideTimeout.current = window.setTimeout(() => {
+            setIsVisible(false);
+          }, 1500);
+        }
+      }}
+    >
+      <div className={`relative transition-all duration-[1500ms] ease-in-out ${
         isScrolled 
           ? 'w-auto mx-auto rounded-full bg-[#000000] shadow-[0_8px_32px_rgba(0,0,0,0.4)]' 
           : 'w-full bg-[#000000]/95'
