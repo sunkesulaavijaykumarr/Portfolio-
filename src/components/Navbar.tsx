@@ -7,7 +7,6 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [logoText, setLogoText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
-  const [showEmailOptions, setShowEmailOptions] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isHiding, setIsHiding] = useState(false);
   const [showEmailPopup, setShowEmailPopup] = useState(false);
@@ -120,19 +119,6 @@ const Navbar = () => {
     { id: 'contact', label: 'Contact' }
   ];
 
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setShowEmailOptions(true);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = window.setTimeout(() => {
-      setShowEmailOptions(false);
-    }, 100); // 1 seconds delay before closing
-  };
-
   const handleEmailClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowEmailPopup(true);
@@ -146,35 +132,6 @@ const Navbar = () => {
       window.location.href = emailLinks.default;
     }
   };
-
-  const EmailOptions = ({ className = "" }) => (
-    <div 
-      className={`backdrop-blur-lg bg-slate-900/90 rounded-lg p-1.5 ${className}`}
-      onMouseEnter={() => {
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-        }
-      }}
-      onMouseLeave={handleMouseLeave}
-    >
-      <a
-        href={emailLinks.gmail}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block px-3 py-1.5 text-[13px] text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-md transition-colors mb-1"
-        onClick={() => setShowEmailOptions(false)}
-      >
-        Gmail
-      </a>
-      <a
-        href={emailLinks.default}
-        className="block px-3 py-1.5 text-[13px] text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-md transition-colors"
-        onClick={() => setShowEmailOptions(false)}
-      >
-        Mail App
-      </a>
-    </div>
-  );
 
   return (
     <>
